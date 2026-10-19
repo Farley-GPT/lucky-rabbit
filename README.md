@@ -32,6 +32,36 @@ const DONATE = {
 
 Any button left empty doesn't appear. Save, commit, done — Pages redeploys itself.
 
+## One page, one QR code (the current design)
+
+Everything lives on the home page (`index.html`). The printed cards all carry the
+**same single QR code**, pointing at this page — the card's printed number does the
+identifying. A finder scans, lands here, scrolls **The Whole Trail**, and taps their
+card's number (or types it into the jump box).
+
+- **Card № 000 — the Doorkeeper.** The page opens greeted by the Original Rabbit
+  (the `assets/aura-lucky-rabbit.jpg` portrait). She exists only here, never in
+  print. Anyone can wish with her as witness.
+- **Cards № 001–192.** Tapping one swaps the greeter to **that card's own Aura
+  image** (all 192 live in `assets/cards/`, numbered in the cut-sheet order;
+  `assets/cards/manifest.json` maps each number back to its original image
+  filename), shows **her note for that card** — every card gets its own
+  combination of greeting + blessing + name ("Aura, the Silver Rabbit"); cards
+  № 000 and № 001 are hand-written, and any card can be hand-written by adding
+  it to `HANDWRITTEN` in `index.html` — and makes her the witness on the
+  downloadable plaque.
+- Direct links still work for sharing: `?card=047` opens the page already
+  greeted by that rabbit.
+- **The locked cabinet.** The № 001–192 previews start tucked behind a pair of
+  cabinet doors in The Whole Trail. A round gold heart latch (with a keyhole
+  while locked) jiggles when tapped, plays Aura's giggle (`assets/giggle.mp3`),
+  and opens the cabinet; tapping again tucks them away. The number jump box
+  works either way, and the donation section lives below the cabinet, always
+  visible.
+
+Earlier prototypes (the v1 single-wish page and the separate `card.html` design)
+are kept in `versions/` for reference; the live tree is the merged page.
+
 ## How it works
 
 - Wish flow: write a wish ("for me" or "for someone else") → music-box chime (synthesized

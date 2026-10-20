@@ -99,6 +99,11 @@
   .actions button{flex:1; padding:13px 8px; border-radius:12px; font-family:var(--serif); font-size:14px; letter-spacing:1.2px; cursor:pointer;}
   .dl{background:linear-gradient(180deg,#EBD488,var(--gold)); color:var(--ink); border:none; font-weight:700;}
   .again{background:transparent; color:var(--mute); border:1px solid var(--gold-dim);}
+  .plaque-out{display:none; margin-top:20px;}
+  .plaque-out.show{display:block; animation:rise .5s ease;}
+  .plaque-out .po-label{color:var(--gold-soft); font-size:11.5px; letter-spacing:3px; margin:0 0 10px;}
+  .plaque-out img{width:100%; max-width:320px; border:2px solid var(--gold); border-radius:14px; box-shadow:0 18px 40px rgba(0,0,0,.5); display:block; margin:0 auto;}
+  .plaque-out .po-hint{color:var(--mute); font-size:13.5px; font-style:italic; line-height:1.55; margin:12px auto 0; max-width:340px;}
   .gallery h2{text-align:center; font-size:19px; letter-spacing:2px; margin:0 0 4px;}
   .gallery .sub{text-align:center; color:var(--mute); font-style:italic; font-size:14px; margin:0 0 16px;}
   .jump{display:flex; gap:8px; max-width:340px; margin:0 auto 18px;}
@@ -213,6 +218,11 @@
     <div class="actions">
       <button class="dl" id="dlBtn" type="button">⬇ Download the plaque</button>
       <button class="again" id="againBtn" type="button">Make another</button>
+    </div>
+    <div class="plaque-out" id="plaqueOut">
+      <p class="po-label">YOUR PLAQUE, READY TO KEEP</p>
+      <img id="plaqueFinal" alt="Your sealed wish plaque">
+      <p class="po-hint" id="plaqueHint"></p>
     </div>
   </section>
 
@@ -465,6 +475,7 @@ wishBtn.addEventListener('click', () => {
       + (sealedWish.card === 0 ? ' · CARD № 000 · THE ORIGINAL' : ' · FOUND CARD № ' + pad(sealedWish.card))
       + ' · SEALED BY THE LUCKY RABBIT';
     document.getElementById('result').classList.add('show');
+    document.getElementById('plaqueOut').classList.remove('show');
     wishBtn.classList.remove('sealing');
     wishBtn.textContent = '✦  Send it to the Rabbit  ✦';
     document.getElementById('result').scrollIntoView({ behavior:'smooth', block:'center' });
@@ -472,6 +483,7 @@ wishBtn.addEventListener('click', () => {
 });
 document.getElementById('againBtn').addEventListener('click', () => {
   document.getElementById('result').classList.remove('show');
+  document.getElementById('plaqueOut').classList.remove('show');
   document.getElementById('wishText').value = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
@@ -530,10 +542,29 @@ document.getElementById('dlBtn').addEventListener('click', () => {
       + (sealedWish.card === 0 ? '  ·  Card № 000 · the Original' : '  ·  Found card № ' + pad(sealedWish.card)), cx, H - 190);
     ctx.fillStyle = '#E7CE7A'; ctx.font = '34px Georgia, serif';
     ctx.fillText('✦ GLITCHMADE ✦', cx, H - 128);
-    const a = document.createElement('a');
-    a.download = 'lucky-rabbit-wish-card-' + pad(sealedWish.card) + '.png';
-    a.href = cv.toDataURL('image/png');
-    a.click();
+    /* Show the finished plaque as a real picture (phones save it by press-and-hold),
+       and also offer the direct download, which desktop browsers take happily. */
+    const showPlaque = (url) => {
+      document.getElementById('plaqueFinal').src = url;
+      document.getElementById('plaqueHint').textContent = ('ontouchstart' in window)
+        ? 'On a phone: press and hold the picture, then choose Save Image — it\'s yours. The download button may work too, depending on your browser.'
+        : 'That\'s the finished plaque. The download should already be on its way — or right-click the picture to save it yourself.';
+      const out = document.getElementById('plaqueOut');
+      out.classList.add('show');
+      out.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    const offerDownload = (url) => {
+      const a = document.createElement('a');
+      a.download = 'lucky-rabbit-wish-card-' + pad(sealedWish.card) + '.png';
+      a.href = url;
+      a.click();
+    };
+    if (cv.toBlob) {
+      cv.toBlob((blob) => { const url = URL.createObjectURL(blob); showPlaque(url); offerDownload(url); }, 'image/png');
+    } else {
+      const url = cv.toDataURL('image/png');
+      showPlaque(url); offerDownload(url);
+    }
   };
   img.src = cardSrc(sealedWish.card);
 });

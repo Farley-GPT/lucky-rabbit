@@ -69,3 +69,24 @@ are kept in `versions/` for reference; the live tree is the merged page.
 - The plaque downloads as a PNG drawn on a canvas — the keepsake is the product.
 - Privacy is the design: there is no server, so wishes cannot be collected, read, or
   leaked. The page says so, because it's true.
+
+## Upgrades (October 2026)
+
+- **Faster page.** The card pictures and the giggle are no longer packed inside
+  `index.html` (it went from ~4.8 MB to ~80 KB). Pictures load from `assets/cards/`
+  only when they're shown.
+- **Every card is hand-written.** All 193 notes now live in `HANDWRITTEN` in `index.html`.
+- **Share this rabbit.** Uses the phone's share sheet, or copies a `?card=NNN` link.
+- **Collector's trail.** The page remembers which rabbits you've met (on your device only,
+  in `localStorage`) and shows "met X / 193". Meet all 193 for a secret note from Aura.
+- **Today's rabbit.** A featured card that changes each day (the same for everyone).
+- **Moon and seasons.** A gold glow near the full moon, plus Halloween, winter, Valentine
+  and clover-week tints.
+- **Plaque choices.** Gold, rose or night-sky frames; tall (1200×1500) or square (1080×1080).
+  Long wishes shrink to fit.
+- **Friendly card lookup.** Numbers outside 0 to 192 show a gentle message instead of jumping.
+- **Optional music.** Drop a quiet looping track at `assets/music.mp3` and a small
+  "♪ Music" toggle appears (off by default). With no file, the toggle stays hidden.
+- **Link previews.** Open Graph / Twitter tags so shared links show Aura.
+
+Still true: no accounts, no server, no analytics. Nothing typed leaves the browser.
